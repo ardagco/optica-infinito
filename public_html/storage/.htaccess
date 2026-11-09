@@ -1,0 +1,8 @@
+# Bloquear acceso HTTP directo a logs y archivos de control de rate-limiting
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

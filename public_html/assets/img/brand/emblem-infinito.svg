@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" aria-labelledby="emblemTitle" role="img">
+  <title id="emblemTitle">Emblema Oficial Óptica Infinito</title>
+  <!-- Outer Optical Ring -->
+  <circle cx="120" cy="120" r="102" stroke="#254B96" stroke-width="12" class="svg-ring" />
+  <!-- Upper Prism Peak -->
+  <path d="M120 46 L94 90 H146 L120 46 Z" fill="#254B96" class="svg-prism-top" />
+  <!-- Horizontal Optical Brow Bar -->
+  <path d="M72 90 H94 L88 100 H152 L146 90 H149 L157 104 H64 L72 90 Z" fill="#254B96" class="svg-brow" />
+  <!-- Central Pupil & Iris Curve -->
+  <path d="M72 110 H98 C98 124 108 134 120 134 C132 134 142 124 142 110 H160 C156 132 140 146 120 146 C96 146 82 126 72 110 Z" fill="#254B96" class="svg-iris" />
+  <!-- Lower Left Prism Wing -->
+  <path d="M78 128 C90 142 104 150 120 152 L84 166 C74 169 64 168 57 165 L78 128 Z" fill="#254B96" class="svg-wing-left" />
+  <!-- Lower Base Left -->
+  <path d="M54 170 C64 174 76 173 88 168 L124 154 V184 H46 L54 170 Z" fill="#254B96" class="svg-base-left" />
+  <!-- Lower Right Prism Pillar -->
+  <path d="M164 112 L202 184 H130 V152 C146 146 158 132 164 112 Z" fill="#254B96" class="svg-base-right" />
+</svg>

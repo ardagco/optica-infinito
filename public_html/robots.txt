@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /includes/
+Disallow: /forms/
+Disallow: /storage/
+
+Sitemap: https://opticainfinito.com.mx/sitemap.xml

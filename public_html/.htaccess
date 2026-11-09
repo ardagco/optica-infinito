@@ -1,0 +1,90 @@
+# =============================================================================
+# ÓPTICA INFINITO — Configuración Apache / LiteSpeed para Neubox Hosting
+# Compatible con PHP 8.2 y PHP 8.3 en cPanel / DirectAdmin
+# =============================================================================
+
+# 1. Deshabilitar listado de directorios
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
+
+# 2. Codificación predeterminada
+AddDefaultCharset UTF-8
+
+# 3. Motor de reescritura (URLs amigables, HTTPS y redirecciones históricas)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # 3.1 Forzar HTTPS en producción (ignorar en localhost / entornos de prueba locales)
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP_HOST} !^localhost(:[0-9]+)?$ [NC]
+    RewriteCond %{HTTP_HOST} !^127\.0\.0\.1(:[0-9]+)?$ [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # 3.2 Redirigir www a dominio canónico sin www (opticainfinito.com.mx)
+    RewriteCond %{HTTP_HOST} ^www\.opticainfinito\.com\.mx$ [NC]
+    RewriteRule ^ https://opticainfinito.com.mx%{REQUEST_URI} [L,R=301]
+
+    # 3.3 Bloquear acceso directo a directorios internos de lógica o almacenamiento
+    RewriteRule ^includes(/|$) - [F,L]
+    RewriteRule ^storage(/|$) - [F,L]
+
+    # 3.4 Compatibilidad con rutas históricas del sitio anterior (CodeIgniter)
+    RewriteRule ^politica-de-privacidad/?$ legal/privacidad.php [L,QSA]
+    RewriteRule ^terminos-y-condiciones/?$ legal/terminos.php [L,QSA]
+    RewriteRule ^empresarial/?$ empresas.php [L,R=301]
+    RewriteRule ^empresas/login/?$ empresas.php#acceso-empresas [L,NE,R=302]
+    RewriteRule ^pacientes/login/?$ pacientes/login.php [L,QSA]
+    RewriteRule ^optica/login/?$ optica/login.php [L,QSA]
+
+    # 3.5 Soporte de URLs limpias sin extensión .php (ej. /nosotros -> /nosotros.php)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteRule ^([^\.]+?)/?$ $1.php [L,QSA]
+</IfModule>
+
+# 4. Protección de archivos sensibles (.env, .git, logs, sql, ejemplos de configuración)
+<FilesMatch "(^\.|config\.env|composer\.(json|lock)|package(-lock)?\.json|\.(sql|log|sh|md|bak|ini)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# 5. Cabeceras de Seguridad HTTP
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+    Header unset X-Powered-By
+</IfModule>
+
+# 6. Compresión GZIP / Deflate para rendimiento
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json application/ld+json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml font/ttf font/otf font/woff font/woff2
+</IfModule>
+
+# 7. Caché de navegador para recursos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 7 days"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 6 months"
+    ExpiresByType image/png "access plus 6 months"
+    ExpiresByType image/webp "access plus 6 months"
+    ExpiresByType image/svg+xml "access plus 6 months"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# 8. Página de error personalizada hacia el inicio en caso de 404
+ErrorDocument 404 /index.php

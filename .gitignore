@@ -1,0 +1,22 @@
+# Credenciales privadas de servidor Neubox (nunca subir a GitHub)
+config.env.php
+.env
+.env.*
+
+# Archivos comprimidos de despliegue y vistas previas compiladas locales
+*.zip
+preview_dist/
+
+# Bitácoras y rate-limiting en tiempo de ejecución
+public_html/storage/logs/*.log
+public_html/storage/ratelimit/*
+!public_html/storage/.htaccess
+!public_html/storage/logs/.gitkeep
+!public_html/storage/ratelimit/.gitkeep
+
+# Archivos de sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
